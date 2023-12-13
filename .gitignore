@@ -1,0 +1,12 @@
+.idea
+DCNv2/build
+DCNv2/DCNv2.egg-info
+DCNv2/_ext.cpython-37m-x86_64-linux-gnu.so
+assets
+build
+exp
+demos/
+dataset/
+*.zip
+*.pth
+*.mp4

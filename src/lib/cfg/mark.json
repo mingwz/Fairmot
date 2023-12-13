@@ -1,0 +1,7 @@
+{
+    "root":"/home/zmw/Graduation_Project/Code/FairMOT/dataset",
+    "train":
+    {
+        "mark":"./data/mark.train"
+    }
+}
