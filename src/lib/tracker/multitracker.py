@@ -246,15 +246,17 @@ class JDETracker(object):
         # torch.onnx.export(self.model, self.img, 'FairMOT.onnx', opset_version=17,
         #                   input_names=['image'], output_names=["hm", "wh", "id", "reg"])
         with torch.no_grad():
-            output = self.model(im_blob)[-1]  # 【0， 1】
-            hm = output['hm'].sigmoid_()
-            wh = output['wh']
-            id_feature = output['id']
-            id_feature = F.normalize(id_feature, dim=1)
-
-            reg = output['reg'] if self.opt.reg_offset else None
-            dets, inds = mot_decode(hm, wh, reg=reg, ltrb=self.opt.ltrb, K=self.opt.K)
-            id_feature = _tranpose_and_gather_feat(id_feature, inds)
+            # output = self.model(im_blob)[-1]  # 【0， 1】
+            hm, wh, reg, hm_pool, id_feature = self.model(im_blob)
+            # hm = output['hm'].sigmoid_()
+            # wh = output['wh']
+            # id_feature = output['id']
+            # id_feature = F.normalize(id_feature, dim=1)
+            #
+            # reg = output['reg'] if self.opt.reg_offset else None
+            dets, inds = mot_decode(hm, wh, hm_pool, reg=reg, ltrb=self.opt.ltrb, K=self.opt.K)
+            # dets, inds = mot_decode(hm, wh, reg=reg, ltrb=self.opt.ltrb, K=self.opt.K)
+            id_feature = _tranpose_and_gather_feat(id_feature, inds, train=False)
             id_feature = id_feature.squeeze(0)  # 取出尺度为一的维度
             id_feature = id_feature.cpu().numpy()
 

@@ -6,11 +6,11 @@ import torch
 import torch.nn as nn
 from .utils import _gather_feat, _tranpose_and_gather_feat
 
-def _nms(heat, kernel=3):
-    pad = (kernel - 1) // 2
-
-    hmax = nn.functional.max_pool2d(
-        heat, (kernel, kernel), stride=1, padding=pad)
+def _nms(heat, hmax, kernel=3):
+    # pad = (kernel - 1) // 2
+    #
+    # hmax = nn.functional.max_pool2d(
+    #     heat, (kernel, kernel), stride=1, padding=pad)
     keep = (hmax == heat).float()
     return heat * keep
 
@@ -47,23 +47,23 @@ def _topk(scores, K=40):
     return topk_score, topk_inds, topk_clses, topk_ys, topk_xs
 
 
-def mot_decode(heat, wh, reg=None, ltrb=False, K=100):
+def mot_decode(heat, wh, hm_pool, reg=None, ltrb=False, K=100):
     batch, cat, height, width = heat.size()
 
     # heat = torch.sigmoid(heat)
     # perform nms on heatmaps
-    heat = _nms(heat)  # max_pooling
+    heat = _nms(heat, hm_pool)  # max_pooling
 
     scores, inds, clses, ys, xs = _topk(heat, K=K)
     if reg is not None:
-        reg = _tranpose_and_gather_feat(reg, inds)
+        reg = _tranpose_and_gather_feat(reg, inds, train=False)
         reg = reg.view(batch, K, 2)
         xs = xs.view(batch, K, 1) + reg[:, :, 0:1]
         ys = ys.view(batch, K, 1) + reg[:, :, 1:2]
     else:
         xs = xs.view(batch, K, 1) + 0.5
         ys = ys.view(batch, K, 1) + 0.5
-    wh = _tranpose_and_gather_feat(wh, inds)
+    wh = _tranpose_and_gather_feat(wh, inds, train=False)
     if ltrb:
         wh = wh.view(batch, K, 4)
     else:

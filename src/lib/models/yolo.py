@@ -4,6 +4,7 @@ import sys
 import os
 from copy import deepcopy
 from pathlib import Path
+import torch.nn.functional as F
 
 from .common import *
 
@@ -63,7 +64,8 @@ def fill_fc_weights(layers):
 
 
 class Model(nn.Module):
-    def __init__(self, config='config/yolov5s.yaml', ch=3, nc=None, anchors=None):  # model, input channels, number of classes
+    def __init__(self, config='config/yolov5s.yaml', ch=3, nc=None,
+                 anchors=None):  # model, input channels, number of classes
         super(Model, self).__init__()
         print(config)
         if isinstance(config, dict):
@@ -164,7 +166,25 @@ class PoseYOLOv5s(nn.Module):
         ret = {}
         for head in self.heads:
             ret[head] = self.__getattr__(head)(x)
-        return [ret]
+
+        if self.training:
+            return [ret]
+        else:
+            # 方便onnx导出
+            hm = ret["hm"]
+            wh = ret["wh"]
+            reg = ret["reg"]
+            hm = F.sigmoid(hm)
+            hm_pool = F.max_pool2d(hm, kernel_size=3, stride=1, padding=1)
+
+            id_feature = ret['id']
+            id_feature = F.normalize(id_feature, dim=1)
+            id_feature = id_feature.permute(0, 2, 3, 1).contiguous()  # switch id dim
+            wh = wh.permute(0, 2, 3, 1).contiguous()  # switch id dim
+            reg = reg.permute(0, 2, 3, 1).contiguous()  # switch id dim
+
+            return [hm, wh, reg, hm_pool, id_feature]
+
 
 
 def get_pose_net(num_layers, heads, head_conv):
@@ -176,7 +196,7 @@ def get_pose_net(num_layers, heads, head_conv):
         os.path.dirname(__file__),
         '../../../models/yolov5s.pt'
     )
-    # print("pretrained", pretrained)
+
     model = PoseYOLOv5s(heads, config_file)
     initialize_weights(model, pretrained)
     return model

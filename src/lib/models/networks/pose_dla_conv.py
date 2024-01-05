@@ -479,8 +479,20 @@ class DLASeg(nn.Module):
         z = {}
         for head in self.heads:
             z[head] = self.__getattr__(head)(y[-1])
+
+        # hm = z["hm"]
+        # wh = z["wh"]
+        # reg = z["reg"]
+        # hm = F.sigmoid(hm)
+        # hm_pool = F.max_pool2d(hm, kernel_size=3, stride=1, padding=1)
+        #
+        # id_feature = z['id']
+        # id_feature = F.normalize(id_feature, dim=1)
+        # id_feature = id_feature.permute(0, 2, 3, 1).contiguous()  # switch id dim
+        #
+        # return [hm, wh, reg, hm_pool, id_feature]
+
         return [z]
-    
 
 def get_pose_net(num_layers, heads, head_conv=256, down_ratio=4):
   model = DLASeg('dla{}'.format(num_layers), heads,
