@@ -200,7 +200,7 @@ class LoadImagesAndLabels:  # for training
         if self.augment:
             img, labels, M = random_affine(img, labels, degrees=(-5, 5), translate=(0.10, 0.10), scale=(0.50, 1.20))
 
-        plotFlag = False
+        plotFlag = True
         if plotFlag:
             import matplotlib
             matplotlib.use('Agg')

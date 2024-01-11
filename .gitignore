@@ -6,6 +6,7 @@ assets
 build
 exp
 demos/
+*.pt
 *.zip
 *.pth
 *.mp4

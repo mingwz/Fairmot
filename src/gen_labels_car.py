@@ -31,14 +31,14 @@ for seq in seqs:
     for fid, tid, x, y, w, h, mark in gt:
         if mark == 0:
             continue
-        fid = int(fid) + 22  # 文件名不是从0开始，是22
+        fid = int(fid)   # 文件名不是从0开始，是22
         tid = int(tid)
         if not tid == tid_last:
             tid_curr += 1
             tid_last = tid
         x += w / 2
         y += h / 2
-        label_fpath = osp.join(seq_label_root, str(fid - 1)+'.txt')
+        label_fpath = osp.join(seq_label_root, str(fid)+'.txt')
         label_str = '0 {:d} {:.6f} {:.6f} {:.6f} {:.6f}\n'.format(
             tid_curr, x / seq_width, y / seq_height, w / seq_width, h / seq_height)
         with open(label_fpath, 'a') as f:

@@ -12,17 +12,17 @@ class opts(object):
     # basic experiment setting
     self.parser.add_argument('--task', default='mot', help='mot')
     self.parser.add_argument('--dataset', default='jde', help='jde')
-    self.parser.add_argument('--exp_id', default='default')
+    self.parser.add_argument('--exp_id', default='mark')
     self.parser.add_argument('--test', action='store_true')
     #self.parser.add_argument('--load_model', default='../models/ctdet_coco_dla_2x.pth',
                              #help='path to pretrained model')src/weights/fairmot_lite.pth
-    self.parser.add_argument('--load_model', default='./weights/fairmot_lite.pth',
+    self.parser.add_argument('--load_model', default='',
                              help='path to pretrained model')
     self.parser.add_argument('--resume', action='store_true',
                              help='resume an experiment. '
                                   'Reloaded the optimizer parameter and '
                                   'set load_model to model_last.pth '
-                                  'in the exp dir if load_model is empty.') 
+                                  'in the exp dir if load_model is empty.')
 
     # system
     self.parser.add_argument('--gpus', default='0',
@@ -45,9 +45,9 @@ class opts(object):
                              help='main metric to save best model')
     self.parser.add_argument('--vis_thresh', type=float, default=0.5,
                              help='visualization threshold.')
-    
+
     # model
-    self.parser.add_argument('--arch', default='yolo',
+    self.parser.add_argument('--arch', default='net',
                              help='model architecture. Currently tested'
                                   'resdcn_34 | resdcn_50 | resfpndcn_34 |'
                                   'dla_34 | hrnet_18')
@@ -69,13 +69,13 @@ class opts(object):
                              help='input width. -1 for default from dataset.')
     
     # train
-    self.parser.add_argument('--lr', type=float, default=1e-4,
+    self.parser.add_argument('--lr', type=float, default=5e-4,
                              help='learning rate for batch size 12.')
     self.parser.add_argument('--lr_step', type=str, default='20',
                              help='drop learning rate by 10.')
     self.parser.add_argument('--num_epochs', type=int, default=30,
                              help='total training epochs.')
-    self.parser.add_argument('--batch_size', type=int, default=12,
+    self.parser.add_argument('--batch_size', type=int, default=4,
                              help='batch size')
     self.parser.add_argument('--master_batch_size', type=int, default=-1,
                              help='batch size on the master gpu.')
@@ -104,7 +104,7 @@ class opts(object):
     self.parser.add_argument('--test_mot15', default=False, help='test mot15')
     self.parser.add_argument('--val_mot16', default=False, help='val mot16 or mot15')
     self.parser.add_argument('--test_mot17', default=False, help='test mot17')
-    self.parser.add_argument('--val_mot17', default=True, help='val mot17')
+    self.parser.add_argument('--val_mot17', default=False, help='val mot17')
     self.parser.add_argument('--val_mot20', default=False, help='val mot20')
     self.parser.add_argument('--test_mot20', default=False, help='test mot20')
     self.parser.add_argument('--val_hie', default=False, help='val hie')
@@ -115,14 +115,14 @@ class opts(object):
     self.parser.add_argument('--track_buffer', type=int, default=30, help='tracking buffer')
     self.parser.add_argument('--min-box-area', type=float, default=100, help='filter out tiny boxes')
     self.parser.add_argument('--input-video', type=str,
-                             default='../videos/MOT16-03.mp4',
+                             default='../videos/mark.mp4',
                              help='path to the input video')
     self.parser.add_argument('--output-format', type=str, default='video', help='video or text')
     self.parser.add_argument('--output-root', type=str, default='../demos', help='expected output root path')
 
     # mot
     self.parser.add_argument('--data_cfg', type=str,
-                             default='../src/lib/cfg/data.json',
+                             default='../src/lib/cfg/mark.json',
                              help='load data from cfg')
     self.parser.add_argument('--data_dir', type=str, default='/home/zmw/Graduation_Project/Code/FairMOT/dataset')
 
@@ -137,7 +137,7 @@ class opts(object):
                              help='loss weight for keypoint heatmaps.')
     self.parser.add_argument('--off_weight', type=float, default=1,
                              help='loss weight for keypoint local offsets.')
-    self.parser.add_argument('--wh_weight', type=float, default=0.1,
+    self.parser.add_argument('--wh_weight', type=float, default=0.5,
                              help='loss weight for bounding box size.')
     self.parser.add_argument('--id_loss', default='ce',
                              help='reid loss: ce | focal')

@@ -2,10 +2,10 @@ import cv2
 import os
 
 # 图片序列所在文件夹路径
-image_folder = '/home/zmw/Graduation_Project/data/data1'
+image_folder = '/home/zmw/Graduation_Project/data/data2'
 
 # 视频输出文件名和参数
-video_name = 'video1.mp4'
+video_name = 'mark2.mp4'
 fps = 20  # 视频帧率
 
 images = [img for img in os.listdir(image_folder) if img.endswith(".jpg")]  # 获取文件夹中所有图片

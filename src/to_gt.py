@@ -6,7 +6,7 @@ if __name__ == "__main__":
     xmls_path = "/home/zmw/Graduation_Project/data/label1/"
     target_path = "/home/zmw/Graduation_Project/data/"
 
-    f = open(target_path + "/" + 'gt' + ".txt", 'w')
+    f = open(target_path + "/" + 'gt2' + ".txt", 'w')
     i = 0
     path_list = os.listdir(xmls_path)
     path_list.sort(key=lambda x: int(x.split('.')[0]))
@@ -40,7 +40,7 @@ if __name__ == "__main__":
             height = ymax - ymin
             # print(xmin, ymin, xmax, ymax, width, height)
             # cat = str(1) + ',' + str(-1) + ',' + str(-1) + ',' + str(-1)
-            string = str(i) + ',' + str(item) + ',' + str(xmin) + ',' + str(ymax) + ',' + str(width) + ',' + str(
+            string = str(i) + ',' + str(item) + ',' + str(xmin) + ',' + str(ymin) + ',' + str(width) + ',' + str(
                 height) + ',' + str(1)
             # print(string)
             f.write(string + '\n')
