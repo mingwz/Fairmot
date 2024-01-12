@@ -6,7 +6,9 @@ assets
 build
 exp
 demos/
+*__pycache__*
 *.pt
 *.zip
 *.pth
 *.mp4
+*.onnx
