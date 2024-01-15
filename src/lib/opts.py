@@ -15,8 +15,8 @@ class opts(object):
     self.parser.add_argument('--exp_id', default='mark')
     self.parser.add_argument('--test', action='store_true')
     #self.parser.add_argument('--load_model', default='../models/ctdet_coco_dla_2x.pth',
-                             #help='path to pretrained model')src/weights/fairmot_lite.pth
-    self.parser.add_argument('--load_model', default='',
+                             #help='path to pretrained model')src/weights/fairmot_lite.pth model_last
+    self.parser.add_argument('--load_model', default='../src/weights/mark.pth',
                              help='path to pretrained model')
     self.parser.add_argument('--resume', action='store_true',
                              help='resume an experiment. '
@@ -47,7 +47,7 @@ class opts(object):
                              help='visualization threshold.')
 
     # model
-    self.parser.add_argument('--arch', default='net',
+    self.parser.add_argument('--arch', default='yolo',
                              help='model architecture. Currently tested'
                                   'resdcn_34 | resdcn_50 | resfpndcn_34 |'
                                   'dla_34 | hrnet_18')
@@ -75,7 +75,7 @@ class opts(object):
                              help='drop learning rate by 10.')
     self.parser.add_argument('--num_epochs', type=int, default=30,
                              help='total training epochs.')
-    self.parser.add_argument('--batch_size', type=int, default=4,
+    self.parser.add_argument('--batch_size', type=int, default=2,
                              help='batch size')
     self.parser.add_argument('--master_batch_size', type=int, default=-1,
                              help='batch size on the master gpu.')
@@ -113,7 +113,7 @@ class opts(object):
     self.parser.add_argument('--det_thres', type=float, default=0.3, help='confidence thresh for detection')
     self.parser.add_argument('--nms_thres', type=float, default=0.4, help='iou thresh for nms')
     self.parser.add_argument('--track_buffer', type=int, default=30, help='tracking buffer')
-    self.parser.add_argument('--min-box-area', type=float, default=100, help='filter out tiny boxes')
+    self.parser.add_argument('--min-box-area', type=float, default=20, help='filter out tiny boxes')
     self.parser.add_argument('--input-video', type=str,
                              default='../videos/mark.mp4',
                              help='path to the input video')
