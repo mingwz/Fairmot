@@ -113,7 +113,7 @@ def parse_model(d, ch):  # model_dict, input_channels(3)
                 pass
 
         n = max(round(n * gd), 1) if n > 1 else n  # depth gain
-        if m in [Conv, Bottleneck, SPP, DWConv, Focus, BottleneckCSP, C3, C2f, C3TR, DeConv, DeConvDCN]:
+        if m in [Conv, Bottleneck, SPP, SPPF, DWConv, Focus, BottleneckCSP, C3, C2f, C3TR, DeConv, DeConvDCN]:
             c1, c2 = ch[f], args[0]
             c2 = make_divisible(c2 * gw, 8)
 
